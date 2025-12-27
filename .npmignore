@@ -1,0 +1,25 @@
+# Source files
+src/
+examples/
+__tests__/
+
+# Configuration
+tsconfig.json
+jest.config.js
+.eslintrc.js
+.prettierrc
+
+# CI/CD
+.github/
+
+# Documentation (keep only README in package)
+ARCHITECTURE.md
+HOW_IT_WORKS.md
+CONTRIBUTING.md
+
+# Development
+*.log
+coverage/
+node_modules/
+.vscode/
+.idea/
