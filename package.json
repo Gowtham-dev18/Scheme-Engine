@@ -1,6 +1,6 @@
 {
   "name": "@naga/scheme-engine",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Scheme engine for Naga to calculate the reward for a given scheme",
   "keywords": [
     "naga",
