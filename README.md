@@ -1,4 +1,4 @@
-# @scheme-engine/scheme-engine
+# @naga/scheme-engine
 
 A powerful reward calculation engine for discount schemes. This package provides a flexible and extensible solution for calculating rewards, discounts, and free products based on complex business rules and conditions.
 
@@ -14,14 +14,14 @@ A powerful reward calculation engine for discount schemes. This package provides
 ## Installation
 
 ```bash
-npm install @scheme-engine/scheme-engine
+npm install @naga/scheme-engine
 ```
 
 ## Quick Start
 
 ```typescript
-import { calculateReward } from '@scheme-engine/scheme-engine';
-import type { IProductItem, IScheme } from '@scheme-engine/scheme-engine';
+import { calculateReward } from '@naga/scheme-engine';
+import type { IProductItem, IScheme } from '@naga/scheme-engine';
 
 const products: IProductItem[] = [
   {

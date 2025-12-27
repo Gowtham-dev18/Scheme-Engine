@@ -1,5 +1,5 @@
 /**
- * @naga/reward-calculator
+ * @naga/scheme-engine
  * 
  * Reward calculation engine for discount schemes
  * 
