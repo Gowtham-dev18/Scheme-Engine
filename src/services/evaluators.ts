@@ -199,28 +199,32 @@ export class EvaluatorsService {
                         }
                     }
 
-                    // Priority 4: If UOM is missing/N/A, fetch product details and assume quantity is in baseUom
-                    // Then convert from baseUom to target UOM using unitPerCase
+                    // Priority 4: If UOM is missing/N/A, assume quantity is in EA (each/pieces) as orders are typically placed in pieces
+                    // Then convert from EA to target UOM using unitPerCase if needed
                     if (!p.uom || p.uom.toUpperCase() === 'N/A') {
+                        // If target UOM is EA (or matches), no conversion needed - return quantity as-is
+                        if (targetUom && targetUom.toUpperCase() === 'EA') {
+                            this.logger.log(`[calculateGroupValue] Product ${p.productId}: UOM was missing/N/A, assumed quantity ${p.quantity} is in EA (matches target UOM)`);
+                            return quantity;
+                        }
+
+                        // Try to convert from EA to target UOM using unitPerCase
                         const productDetails = await this.getProductUomDetails(p.productId);
-                        const baseUom = productDetails.baseUom;
                         const unitPerCase = productDetails.unitPerCase || p.unitPerCase;
 
-                        if (baseUom && unitPerCase && unitPerCase.length > 0) {
-                            // Assume quantity is in baseUom, convert to target UOM
-                            const convertedQuantity = await this.convertUom(p.quantity, baseUom, targetUom, unitPerCase);
+                        if (unitPerCase && unitPerCase.length > 0) {
+                            // Assume quantity is in EA, convert to target UOM
+                            const convertedQuantity = await this.convertUom(p.quantity, 'EA', targetUom, unitPerCase);
                             if (convertedQuantity !== p.quantity) {
                                 quantity = convertedQuantity;
-                                this.logger.log(`[calculateGroupValue] Product ${p.productId}: UOM was missing/N/A, assumed quantity ${p.quantity} is in baseUom ${baseUom}, converted to ${quantity} ${targetUom}`);
+                                this.logger.log(`[calculateGroupValue] Product ${p.productId}: UOM was missing/N/A, assumed quantity ${p.quantity} is in EA, converted to ${quantity} ${targetUom}`);
                                 return quantity;
-                            } else {
-                                // If baseUom matches targetUom, no conversion needed
-                                if (baseUom.toUpperCase() === targetUom.toUpperCase()) {
-                                    this.logger.log(`[calculateGroupValue] Product ${p.productId}: UOM was missing/N/A, assumed quantity ${p.quantity} is in baseUom ${baseUom} (matches target UOM)`);
-                                    return quantity;
-                                }
                             }
                         }
+
+                        // If target UOM is EA or conversion not possible, return quantity as-is (assumed to be EA)
+                        this.logger.log(`[calculateGroupValue] Product ${p.productId}: UOM was missing/N/A, assumed quantity ${p.quantity} is in EA, using as-is (target: ${targetUom || 'N/A'})`);
+                        return quantity;
                     }
 
                     // If no conversion possible, log warning and use original quantity
