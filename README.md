@@ -1,4 +1,4 @@
-# @coder_18/scheme-engine
+# Scheme Engine 🚂
 
 A powerful reward calculation engine for discount schemes. This package provides a flexible and extensible solution for calculating rewards, discounts, and free products based on complex business rules and conditions.
 
